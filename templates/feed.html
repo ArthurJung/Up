@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Feed</title>
+</head>
+<body>
+    {% for post in posts %}
+        <h1>{{post.descricao}}</h1>
+        {% for foto in post.fotoPostagem %}
+            <img src="../{{foto.fotoURL}}" width="100">
+        {% endfor %}
+    {% endfor %}
+</body>
+</html>
