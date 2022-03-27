@@ -28,7 +28,7 @@ def login():
         if verify:
             return redirect(url_for('profile'))
 
-        return redirect(url_for('login'))
+        return render_template('/login.html', errou_senha="Usuário ou senha incorretos!")
 
     return render_template('/login.html')
 
@@ -57,6 +57,7 @@ def register():
 @app.route('/profile', methods=['GET', 'POST'])
 def profile():
     global account
+    # Se não existir conta logada o python retorna a página de login
     if account is None:
         return redirect(url_for('login'))
     if request.method == 'POST':

@@ -63,7 +63,7 @@ class Conta:
                 if account['_nomeUsuario'] == self._nomeUsuario:
                     account['_postagens'].append(post)
         with open('Contas.json', 'w') as file:
-            json.dump(data, file)
+            json.dump(data, file)# Bizarrice
 
     def RemoverPostagem(self, idPostagem):
         for postagem in self._postagens:
