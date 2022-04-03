@@ -34,8 +34,8 @@ def login():
     return render_template('/login.html')
 
 
-@app.route('/register', methods=['GET', 'POST'])
-def register():
+@app.route('/cadastro', methods=['GET', 'POST'])
+def cadastro():
     import datetime
     global account
 
@@ -45,17 +45,17 @@ def register():
         senha = request.form['password']
         c_senha = request.form['repassword']
         if senha != c_senha:
-            return render_template('/register.html', errou_senha="As senhas são diferentes !")
+            return render_template('/cadastro.html', errou_senha="As senhas são diferentes !")
         datanascimento = datetime.datetime.strptime(request.form['data'], '%Y-%m-%d').strftime('%d/%m/%Y')
         if AlredyExistName_Email(nome, email):
-            return render_template('/register.html', errou_senha="Nome de usuário ou email já existem !")
+            return render_template('/cadastro.html', errou_senha="Nome de usuário ou email já existem !")
         nAccount = Conta_Perfil(NewId(), nome, senha, email, datanascimento, None, [], [], True)
         CriarConta(nAccount)
         verify, account = Login(nome, senha)
         if verify:
             return redirect(url_for('profile'))
 
-    return render_template('/register.html')
+    return render_template('/cadastro.html')
 
 
 @app.route('/profile', methods=['GET', 'POST'])
