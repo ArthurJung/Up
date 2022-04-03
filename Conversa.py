@@ -1,14 +1,17 @@
-from GerarID import NewId
+from datetime import datetime
 from Mensagem import Mensagem
+from GerarID import NewId
 
 
 class Conversa:
-    def __init__(self, idOrigem, idParticipante, texto, fotoURL=None):
-        self._idConversa = NewId()
-        self._idAdmin = [idOrigem]
-        self._idParticipantes = [idOrigem, idParticipante] # ids dos Usuarios participantes
-        self._mensagem = []
-        self.AdicionarMensagem(idOrigem, texto, fotoURL)
+    def __init__(self, _idConversa, _idAdmin, _idParticipantes, _Firstmensagem):
+        self._idConversa = _idConversa
+        self._idAdmin = [_idAdmin]
+        if type(_idParticipantes) is not list:
+            self._idParticipantes = [_idParticipantes]
+        else:
+            self._idParticipantes = [participante for participante in _idParticipantes]
+        self._mensagens = [Mensagem(NewId(), _idAdmin, datetime.today(), _Firstmensagem)]
 
     @property
     def idConversa(self):
@@ -23,79 +26,67 @@ class Conversa:
         return self._idParticipantes
 
     @property
-    def mensagem(self):
-        return self._mensagem
+    def mensagens(self):
+        return self._mensagens
 
-    def AdicionarAdmin(self, idOrigem, idParticipante):
+    def AdicionarAdmin(self, idAdmin, idParticipante):
         for admin in self._idAdmin:
-            if idOrigem == admin:
+            if idAdmin == admin:
                 for participante in self._idParticipantes:
                     if participante == idParticipante:
                         self._idAdmin.append(idParticipante)
-                        break
+                        return 1 # Sucesso
                 else:
-                    print("Esse participante não existe!")
-                    break
+                    return -1 # Participante não existe
         else:
-            print("Você não é admin")
+            return 0 # Você não é adimin
 
-    def RemoverAdmin(self, idOrigem, idParticipante):
+    def RemoverAdmin(self, idAdmin, idParticipante):
         for admin in self._idAdmin:
-            if idOrigem == admin:
+            if idAdmin == admin:
                 for adm in self._idAdmin:
                     if adm == idParticipante:
                         if adm is not(self._idAdmin[0]):
                             self._idAdmin.remove(idParticipante)
-                            break
+                            return 1 # Sucesso
                         else:
-                            print("Você não pode remover o main admin!")
+                            return 2 # main admin
                 else:
-                    print("Esse admin não existe!")
-                    break
+                    return -1 # Participante não existe
         else:
-            print("Você não é admin")
+            return 0 # Você não é admin
 
-    def AdicionarParticipante(self, idOrigem, idParticipante):
+    def AdicionarParticipante(self, idAdmin, idParticipante):
         for admin in self._idAdmin:
-            if admin == idOrigem:
+            if admin == idAdmin:
                 self._idParticipantes.append(idParticipante)
-                break
+                return 1 # Sucesso
         else:
-            print("Você não é admin!")
+            return 0 # Você não é admin
 
-    def RemoverParticipante(self, idOrigem, idParticipante):
+    def RemoverParticipante(self, idAdmin, idParticipante):
         for admin in self._idAdmin:
-            if admin == idOrigem:
+            if admin == idAdmin:
                 self._idParticipantes.remove(idParticipante)
-                break
+                return 1 # Sucesso
         else:
-            print("Você não é admin!")
+            return 0 # Você não é admin
 
-    def SelfRemoveConversa(self, idOrigem):
-        for participante in self._idParticipantes:
-            if participante == idOrigem:
-                if participante in self._idAdmin:
-                    if len(self._idAdmin) == 1:
-                        self._idAdmin.remove(idOrigem)
-                        self._idParticipantes.remove(idOrigem)
-                        for member in self._idParticipantes:
-                            self._idAdmin.append(member)
-                            break
-                    else:
-                        self._idAdmin.remove(idOrigem)
-                        self._idParticipantes.remove(idOrigem)
-                        break
-                else:
-                    self._idParticipantes.remove(idOrigem)
-                    break
+    def EnviarMensagem(self, idParticipante, texto):
+        self._mensagens.append(Mensagem(NewId(), idParticipante, datetime.today(), texto))
 
-    def AdicionarMensagem(self, idOrigem, texto, fotoURL=None):
-        self._mensagem.append(Mensagem(random(), idOrigem, texto, fotoURL))
-
-    def ExcluirMensagem(self, idOrigem, idMensagem):
-        for mensagem in self._mensagem:
+    def ExcluirMensagem(self, idParticipante, idMensagem):
+        for mensagem in self._mensagens:
             if mensagem.idMensagem == idMensagem:
-                if idOrigem == mensagem.idOrigem:
-                    self._mensagem.remove(mensagem)
+                if idParticipante == mensagem.idOrigem:
+                    self._mensagens.remove(mensagem)
+                    return 1 # Mensagem excluida
                 else:
-                    print("Você não pode exluir a mensagem de outrem!")
+                    return 0 # Mensagem não pode ser excluida
+
+    def ToJSON(self):
+        import json
+        if self._mensagens is not None:
+            for mensagem in range(len(self._mensagens)):
+                self._mensagens[mensagem].ToJson()
+                self._mensagens[mensagem] = json.loads(json.dumps(self._mensagens[mensagem].__dict__))
