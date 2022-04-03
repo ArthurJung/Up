@@ -1,94 +1,48 @@
-from GerarID import NewId
-from datetime import datetime
-from Foto import Foto
-from Mensagem import Mensagem
-import json
-
-
 class Postagem:
-    def __init__(self, _idPostagem, _idOrigem, _descricao, _data, _fotoPostagem=[], _comentario=[], _like=[]):
+    def __init__(self, _idPostagem, _idUsuario, _descricao, _fotos, _data, _comentarios, _likes):
         self._idPostagem = _idPostagem
-        self._idOrigem = _idOrigem
+        self._idUsuario = _idUsuario
         self._descricao = _descricao
-        self._fotoPostagem = []
-        with open('Contas.json', 'r') as file:
-            data = json.load(file)
-            for account in data['_accounts']:
-                if account['_perfil']['_idUsuario'] == _idOrigem:
-                    for post in account['_postagens']:
-                        if post['_idPostagem'] == _idPostagem:
-                            self._data = _data
-                            if _fotoPostagem is not None:
-                                for foto in _fotoPostagem:
-                                    self._fotoPostagem.append(Foto(**foto))
-                            break
-            else:
-                self._data = str(datetime.today())
-                if _fotoPostagem is not None:
-                    for foto in _fotoPostagem:
-                        self._fotoPostagem.append(Foto(NewId(), _idOrigem, foto))
-                else:
-                    self._fotoPostagem = []
-            self._comentario = _comentario
-            self._like = _like
-
-    @property
-    def descricao(self):
-        return self._descricao
-
-    @property
-    def data(self):
-        return self._data
-
-    @property
-    def like(self):
-        return len(self._like)
-
-    def likeUser(self, idOrigem):
-        for like in self._like:
-            if like == idOrigem:
-                print("Você já deu like!")
-                break
+        if type(_fotos) is not list:
+            self._fotos = [_fotos]
         else:
-            self._like.append(idOrigem)
+            self._fotos = [foto for foto in _fotos]
+        self._data = _data
+        self._comentarios = _comentarios
+        self._likes = _likes
 
     @property
     def idPostagem(self):
         return self._idPostagem
 
     @property
-    def idOrigem(self):
-        return self._idOrigem
+    def idUsuario(self):
+        return self._idUsuario
 
     @property
-    def comentario(self):
-        return self._comentario
+    def descricao(self):
+        return self._descricao
 
     @property
-    def fotoPostagem(self):
-        return self._fotoPostagem
+    def fotos(self):
+        return self._fotos
 
-    def AdicionarComentario(self, idOrigem, texto):
-        self._comentario.append(Mensagem(NewId(), idOrigem, texto))
+    @property
+    def data(self):
+        return self._data
 
-    def RemoverComentario(self, idOrigem, idMensagem):
-        for comentario in self._comentario:
-            if comentario.idMensagem == idMensagem:
-                if comentario.idOrigem == idOrigem:
-                    self._comentario.remove(comentario)
-                else:
-                    print("Você não pode remover o comentario de outrem!")
+    @property
+    def comentarios(self):
+        return self._comentarios
 
-    def ApagarComentario(self, idOrigem, idMensagem):
-        for comentario in self._comentario:
-            if comentario.idMensagem == idMensagem:
-                if self._idOrigem == idOrigem:
-                    self._comentario.remove(comentario)
-                else:
-                    print("Você não pode apagar o comentario na postagem de outrem!")
+    @property
+    def likes(self):
+        return self._likes
 
-    def FotoToJSON(self):
+    def ToJSON(self):
         import json
-        if self._fotoPostagem is not None:
-            for foto in range(len(self._fotoPostagem)):
-                self._fotoPostagem[foto] = json.loads(json.dumps(self._fotoPostagem[foto].__dict__))
+        self._data = json.loads(json.dumps(self._data, indent=4, sort_keys=True, default=str))
+        if self._comentarios is not None:
+            for comentario in range(len(self._comentarios)):
+                self._comentarios[comentario].ToJson()
+                self._comentarios[comentario] = json.loads(json.dumps(self._comentarios[comentario].__dict__))
