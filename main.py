@@ -76,9 +76,9 @@ def profile():
 @app.route('/feed')
 def feed():
     global account
-    if account.idUsuario != 0000000000000000:
-        return render_template('/feed.html', posts=account.postagens)
-    return redirect(url_for('login'))
+    if account.idUsuario == 0000000000000000:
+        return redirect(url_for('login'))
+    return render_template('/feed.html', posts=account.postagens)
 
 
 @app.route('/message', methods=['GET', 'POST'])
