@@ -43,9 +43,12 @@ def register():
         nome = request.form['username']
         email = request.form['email']
         senha = request.form['password']
+        c_senha = request.form['repassword']
+        if senha != c_senha:
+            return render_template('/register.html', errou_senha="As senhas são diferentes !")
         datanascimento = datetime.datetime.strptime(request.form['data'], '%Y-%m-%d').strftime('%d/%m/%Y')
         if AlredyExistName_Email(nome, email):
-            return redirect(url_for('register'))
+            return render_template('/register.html', errou_senha="Nome de usuário ou email já existem !")
         nAccount = Conta_Perfil(NewId(), nome, senha, email, datanascimento, None, [], [], True)
         CriarConta(nAccount)
         verify, account = Login(nome, senha)
@@ -61,6 +64,14 @@ def profile():
     # Se não existir conta logada o python retorna a página de login
     if account.idUsuario == 0000000000000000:
         return redirect(url_for('login'))
+    return render_template('/profile.html', user=account.nome)
+
+
+@app.route('/publicacao', methods=['GET', 'POST'])
+def publicacao():
+    global account
+    if account.idUsuario == 0000000000000000:
+        return redirect(url_for('login'))
     if request.method == 'POST':
         descricao = request.form['descricao']
         files = request.files['files']
@@ -69,8 +80,7 @@ def profile():
         path = f'{UPLOAD_FOLDER}{files.filename}'
         files.save(path)
         _, account = account.FazerPostagem(descricao, [path])
-
-    return render_template('/profile.html', user=account.nome)
+    return render_template('/publicacao.html')
 
 
 @app.route('/feed')
@@ -103,6 +113,22 @@ def message():
         _, account = account.CriarConversa(participante.idUsuario, texto)
 
     return render_template('/message.html', users=users)
+
+
+@app.route('/notificacao')
+def notificacao():
+    global account
+    if account.idUsuario == 0000000000000000:
+        return redirect(url_for('login'))
+    return render_template('/notificacao.html')
+
+
+@app.route('/cometarios')
+def cometarios():
+    global account
+    if account.idUsuario == 0000000000000000:
+        return redirect(url_for('login'))
+    return render_template('/cometarios.html')
 
 
 if __name__ == '__main__':

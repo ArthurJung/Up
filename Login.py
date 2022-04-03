@@ -10,4 +10,5 @@ def Login(nomeUsuario, senha):
                 account = Conta_Perfil(**account)
                 return True, account
         else:
-            return False, None
+            account = Conta_Perfil(0000000000000000, '', '', '', '', None, [], [], False)
+            return False, account
