@@ -123,12 +123,12 @@ def notificacao():
     return render_template('/notificacao.html')
 
 
-@app.route('/cometarios')
-def cometarios():
+@app.route('/comentarios')
+def comentarios():
     global account
     if account.idUsuario == 0000000000000000:
         return redirect(url_for('login'))
-    return render_template('/cometarios.html')
+    return render_template('/comentarios.html')
 
 
 if __name__ == '__main__':
