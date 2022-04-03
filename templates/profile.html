@@ -5,18 +5,21 @@
     <title>Profile</title>
 </head>
 <body>
-    <h1>Hello! how are you ?</h1>
+    <h1>Bem vindo ao seu perfil {{user}} !</h1>
     <form method="POST" enctype="multipart/form-data">
-        <textarea id="descricao" name="descricao" rows="4" cols="50">
-                O que te fez rir hoje?
-        </textarea>
-        <br>
+        <textarea id="descricao" name="descricao" rows="4" cols="50" placeholder="O que te fez rir hoje?"></textarea>
+        <br><br>
         <input type="file" name="files"/>
-        <br>
+        <br><br>
         <input type="submit"/>
     </form>
+    <br><br>
     <a class="bnt-feed" href="feed">
         Feed
+    </a>
+    <br><br>
+    <a class="bnt-feed" href="message">
+        Criar Conversa
     </a>
 </body>
 </html>
