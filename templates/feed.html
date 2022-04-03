@@ -7,8 +7,8 @@
 <body>
     {% for post in posts %}
         <h1>{{post.descricao}}</h1>
-        {% for foto in post.fotoPostagem %}
-            <img src="../{{foto.fotoURL}}" width="100">
+        {% for foto in post.fotos %}
+            <img src="../{{foto}}" width="100">
         {% endfor %}
     {% endfor %}
 </body>
