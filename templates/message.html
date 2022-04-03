@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Message</title>
+</head>
+<body>
+    <form method="POST">
+        <label for="Pessoas">Escolha com quem quer conversar:</label>
+        <select name="users" id="users">
+            {% for user in users %}
+                <option value="{{user['_nome']}}">{{user['_nome']}}</option>
+            {% endfor %}
+        </select>
+        <br><br>
+        <textarea id="message" name="message" rows="1" cols="50" placeholder="Mensagem"></textarea>
+        <input type="submit"/>
+    </form>
+</body>
+</html>
