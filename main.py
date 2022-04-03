@@ -2,6 +2,7 @@ from Conta import Conta_Perfil
 from Login import Login
 from GerarID import NewId
 from CriarConta import CriarConta, AlredyExistName_Email
+import json
 import os
 from flask import (
     Flask,
@@ -58,7 +59,7 @@ def register():
 def profile():
     global account
     # Se não existir conta logada o python retorna a página de login
-    if account is None:
+    if account.idUsuario == 0000000000000000:
         return redirect(url_for('login'))
     if request.method == 'POST':
         descricao = request.form['descricao']
@@ -69,15 +70,39 @@ def profile():
         files.save(path)
         _, account = account.FazerPostagem(descricao, [path])
 
-    return render_template('/profile.html')
+    return render_template('/profile.html', user=account.nome)
 
 
 @app.route('/feed')
 def feed():
     global account
-    if account is not None:
+    if account.idUsuario != 0000000000000000:
         return render_template('/feed.html', posts=account.postagens)
     return redirect(url_for('login'))
+
+
+@app.route('/message', methods=['GET', 'POST'])
+def message():
+    global account
+    users = []
+    if account.idUsuario == 0000000000000000:
+        return redirect(url_for('login'))
+    with open('Contas.json', 'r') as file:
+        data = json.load(file)
+        for data_user in data['_accounts']:
+            if data_user['_nome'] != account.nome:
+                users.append(data_user)
+    if request.method == 'POST':
+        nomepp = request.form['users']
+        texto = request.form['message']
+        with open('Contas.json', 'r') as file:
+            data = json.load(file)
+            for data_user in data['_accounts']:
+                if data_user['_nome'] == nomepp:
+                    participante = Conta_Perfil(**data_user)
+        _, account = account.CriarConversa(participante.idUsuario, texto)
+
+    return render_template('/message.html', users=users)
 
 
 if __name__ == '__main__':

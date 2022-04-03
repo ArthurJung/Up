@@ -1,6 +1,7 @@
 from Postagem import Postagem
 from Conversa import Conversa
 from datetime import datetime
+from Mensagem import Mensagem
 from GerarID import NewId
 import json
 
@@ -93,8 +94,20 @@ class Conta_Perfil:
             return 0 # Erro ao remover postagem
 
     def CriarConversa(self, idParticipantes, texto):
-        conversation = Conversa(NewId(), self._idUsuario, idParticipantes, texto)
+        message = Mensagem(NewId(), self._idUsuario, datetime.today(), texto)
+        conversation = Conversa(NewId(), self._idUsuario, idParticipantes, [message])
         self._conversas.append(conversation)
+        conversation.ToJSON()
+
+        with open('Contas.json', 'r') as file:
+            accounts = json.load(file)
+            for account in accounts['_accounts']:
+                if account['_nome'] == self._nome:
+                    account['_conversas'].append(json.loads(json.dumps(conversation.__dict__)))
+        with open('Contas.json', 'w') as file:
+            json.dump(accounts, file)
+        from Login import Login
+        return Login(self._nome, self._senha)
 
     def SairConversa(self, idConversa):
         for conversa in self._conversas:

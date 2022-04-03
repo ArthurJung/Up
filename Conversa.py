@@ -4,14 +4,14 @@ from GerarID import NewId
 
 
 class Conversa:
-    def __init__(self, _idConversa, _idAdmin, _idParticipantes, _Firstmensagem):
+    def __init__(self, _idConversa, _idAdmin, _idParticipantes, _mensagens):
         self._idConversa = _idConversa
         self._idAdmin = [_idAdmin]
         if type(_idParticipantes) is not list:
             self._idParticipantes = [_idParticipantes]
         else:
             self._idParticipantes = [participante for participante in _idParticipantes]
-        self._mensagens = [Mensagem(NewId(), _idAdmin, datetime.today(), _Firstmensagem)]
+        self._mensagens = [message for message in _mensagens]
 
     @property
     def idConversa(self):
