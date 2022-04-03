@@ -1,19 +1,9 @@
-from datetime import datetime
-from GerarID import NewId
-from Foto import Foto
-
-
 class Mensagem:
-    def __init__(self, idMensagem, idOrigem, texto, fotoURL=None):
-        self._idMensagem = idMensagem
-        self._idOrigem = idOrigem  # idConversa ou idPostagem
-        self._data = datetime.today() # Retorna o dia
-        self._like = 0
-        self._texto = texto
-        if fotoURL is not None:
-            self._foto = Foto(NewId(), idOrigem, fotoURL)
-        else:
-            self._foto = None
+    def __init__(self, _idMensagem, _idOrigem, _data, _texto):
+        self._idMensagem = _idMensagem
+        self._idOrigem = _idOrigem
+        self._data = _data
+        self._texto = _texto
 
     @property
     def idMensagem(self):
@@ -28,13 +18,9 @@ class Mensagem:
         return self._data
 
     @property
-    def like(self):
-        return self._like
-
-    @property
     def texto(self):
         return self._texto
 
-    @property
-    def foto(self):
-        return self._foto
+    def ToJson(self):
+        import json
+        self._data = json.loads(json.dumps(self._data, indent=4, sort_keys=True, default=str))
