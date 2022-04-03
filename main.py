@@ -1,4 +1,4 @@
-from Conta import Conta
+from Conta import Conta_Perfil
 from Login import Login
 from GerarID import NewId
 from CriarConta import CriarConta, AlredyExistName_Email
@@ -15,7 +15,7 @@ UPLOAD_FOLDER = 'static/images/uploads/'
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-account = None
+account = Conta_Perfil(0000000000000000, '', '', '', '', None, [], [], False)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -28,7 +28,7 @@ def login():
         if verify:
             return redirect(url_for('profile'))
 
-        return render_template('/login.html', errou_senha="Usuário ou senha incorretos!")
+        return render_template('/login.html', errou_senha="Usuário ou senha incorretos !")
 
     return render_template('/login.html')
 
@@ -45,8 +45,8 @@ def register():
         datanascimento = datetime.datetime.strptime(request.form['data'], '%Y-%m-%d').strftime('%d/%m/%Y')
         if AlredyExistName_Email(nome, email):
             return redirect(url_for('register'))
-        create_account = Conta(nome, senha, _email=email, _dataNascimento=datanascimento)
-        CriarConta(create_account)
+        nAccount = Conta_Perfil(NewId(), nome, senha, email, datanascimento, None, [], [], True)
+        CriarConta(nAccount)
         verify, account = Login(nome, senha)
         if verify:
             return redirect(url_for('profile'))
@@ -67,12 +67,12 @@ def profile():
         files.filename = str(NewId()) + file_extension
         path = f'{UPLOAD_FOLDER}{files.filename}'
         files.save(path)
-        account.FazerPostagem(descricao, [path])
+        _, account = account.FazerPostagem(descricao, [path])
 
     return render_template('/profile.html')
 
 
-@app.route('/feed', methods=['GET', 'POST'])
+@app.route('/feed')
 def feed():
     global account
     if account is not None:
