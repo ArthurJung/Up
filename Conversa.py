@@ -2,7 +2,7 @@ from datetime import datetime
 from Mensagem import Mensagem
 from GerarID import NewId
 
-
+#Cria a classe conversa com os atributos: id da conversa, id do administrador da conversa, id dos participantes e as mensagens
 class Conversa:
     def __init__(self, _idConversa, _idAdmin, _idParticipantes, _mensagens):
         self._idConversa = _idConversa
@@ -29,6 +29,7 @@ class Conversa:
     def mensagens(self):
         return self._mensagens
 
+    #Método que permite incluir um participante como administrador na conversa
     def AdicionarAdmin(self, idAdmin, idParticipante):
         for admin in self._idAdmin:
             if idAdmin == admin:
@@ -41,6 +42,7 @@ class Conversa:
         else:
             return 0 # Você não é adimin
 
+    #Método que remove a permissão de um participante ser administrador na conversa
     def RemoverAdmin(self, idAdmin, idParticipante):
         for admin in self._idAdmin:
             if idAdmin == admin:
@@ -56,6 +58,7 @@ class Conversa:
         else:
             return 0 # Você não é admin
 
+    #Método para adicionar um novo participante na conversa
     def AdicionarParticipante(self, idAdmin, idParticipante):
         for admin in self._idAdmin:
             if admin == idAdmin:
@@ -64,6 +67,7 @@ class Conversa:
         else:
             return 0 # Você não é admin
 
+    #Método para remover um participante da conversa
     def RemoverParticipante(self, idAdmin, idParticipante):
         for admin in self._idAdmin:
             if admin == idAdmin:
@@ -72,9 +76,11 @@ class Conversa:
         else:
             return 0 # Você não é admin
 
+    #Método que envia as mensagens com base na identificação do usuário e data e hora
     def EnviarMensagem(self, idParticipante, texto):
         self._mensagens.append(Mensagem(NewId(), idParticipante, datetime.today(), texto))
 
+    #Método que exclui uma mensagem existente, buscando conforme o id do usuário e o id da mensagem a ser excluída
     def ExcluirMensagem(self, idParticipante, idMensagem):
         for mensagem in self._mensagens:
             if mensagem.idMensagem == idMensagem:
@@ -84,6 +90,7 @@ class Conversa:
                 else:
                     return 0 # Mensagem não pode ser excluida
 
+    #Arquivo JSON
     def ToJSON(self):
         import json
         if self._mensagens is not None:
