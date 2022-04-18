@@ -119,7 +119,7 @@ class Conta_Perfil:
         from Login import Login
         return Login(self._nome, self._senha)
 
-    #Método para sair de uma conversa com outros participantes
+    # Método para sair de uma conversa com outros participantes
     def SairConversa(self, idConversa):
         for conversa in self._conversas:
             if conversa.idConversa == idConversa:
@@ -129,7 +129,7 @@ class Conta_Perfil:
             return 0  # Erro ao remover conversa
 
     # def DarLike(self, postagem):
-    #     postagem.likeUser(self._idUsuario)
+    #  postagem.likeUser(self._idUsuario)
 
     #Arquivo JSON
     def ToJSON(self):

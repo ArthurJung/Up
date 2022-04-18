@@ -7,7 +7,7 @@ class Mensagem:
         self._texto = _texto
 
     @property
-    def idMensagem(self):
+    def idMensagem(self):           #privado
         return self._idMensagem
 
     @property
