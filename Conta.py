@@ -82,7 +82,7 @@ class Conta_Perfil:
         #abre o arquivo json
         with open('Contas.json', 'r') as file:
             accounts = json.load(file)
-            #busca a conta no banco de dados e faz a postagem se for encontrada
+            #busca a conta no banco de dados e faz a postagem caso seja encontrada
             for account in accounts['_accounts']:
                 if account['_nome'] == self._nome:
                     account['_postagens'].append(json.loads(json.dumps(post.__dict__)))
