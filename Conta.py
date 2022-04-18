@@ -107,7 +107,7 @@ class Conta_Perfil:
         self._conversas.append(conversation)
         conversation.ToJSON()
 
-        #abre o arquivo json
+        #inicializa o arquivo json
         with open('Contas.json', 'r') as file:
             accounts = json.load(file)
             #busca a conta no banco de dados e cria a conversa se for encontrada
