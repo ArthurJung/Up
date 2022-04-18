@@ -100,7 +100,7 @@ class Conta_Perfil:
         else:
             return 0 # Erro ao remover postagem
 
-    #Método para criar uma nova conversa por meio do id dos participantes e do texto
+    #Método que cria uma nova conversa por meio do id dos participantes e do texto
     def CriarConversa(self, idParticipantes, texto):
         message = Mensagem(NewId(), self._idUsuario, datetime.today(), texto)
         conversation = Conversa(NewId(), self._idUsuario, idParticipantes, [message])
