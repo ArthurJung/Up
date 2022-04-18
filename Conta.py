@@ -79,7 +79,7 @@ class Conta_Perfil:
         #abre o arquivo json
         with open('Contas.json', 'r') as file:
             accounts = json.load(file)
-
+            #busca a conta no banco de dados e faz a postagem se for encontrada
             for account in accounts['_accounts']:
                 if account['_nome'] == self._nome:
                     account['_postagens'].append(json.loads(json.dumps(post.__dict__)))
@@ -102,8 +102,10 @@ class Conta_Perfil:
         self._conversas.append(conversation)
         conversation.ToJSON()
 
+        #abre o arquivo json
         with open('Contas.json', 'r') as file:
             accounts = json.load(file)
+            #busca a conta no banco de dados e cria a conversa se for encontrada
             for account in accounts['_accounts']:
                 if account['_nome'] == self._nome:
                     account['_conversas'].append(json.loads(json.dumps(conversation.__dict__)))
