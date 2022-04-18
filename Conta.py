@@ -17,7 +17,7 @@ class Conta_Perfil:
         self._fotoPerfil = _fotoPerfil
         self._postagens = [Postagem(**post) for post in _postagens]
         self._conversas = [Conversa(**conversa) for conversa in _conversas]
-        self._status = _status #O status define se a conta está banida ou se continua ativa
+        self._status = _status #O status define se a conta está banida ou se continuara ativa
 
     @property
     def idUsuario(self):
