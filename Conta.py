@@ -5,8 +5,9 @@ from Mensagem import Mensagem
 from GerarID import NewId
 import json
 
-
+#Cria a classe Conta_Perfil
 class Conta_Perfil:
+    #Definindo os atributos da classe: o id do usuário, senha, email, data de nascimento, foto de perfil, publicações, conversas e o status da conta
     def __init__(self, _idUsuario, _nome, _senha, _email, _dataNascimento, _fotoPerfil, _postagens, _conversas, _status):
         self._idUsuario = _idUsuario
         self._nome = _nome
@@ -16,7 +17,7 @@ class Conta_Perfil:
         self._fotoPerfil = _fotoPerfil
         self._postagens = [Postagem(**post) for post in _postagens]
         self._conversas = [Conversa(**conversa) for conversa in _conversas]
-        self._status = _status
+        self._status = _status #O status define se a conta está banida ou se continua ativa
 
     @property
     def idUsuario(self):
@@ -75,8 +76,10 @@ class Conta_Perfil:
         self._postagens.append(post)
         post.ToJSON()
 
+        #abre o arquivo json
         with open('Contas.json', 'r') as file:
             accounts = json.load(file)
+
             for account in accounts['_accounts']:
                 if account['_nome'] == self._nome:
                     account['_postagens'].append(json.loads(json.dumps(post.__dict__)))
