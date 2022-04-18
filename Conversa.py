@@ -80,7 +80,7 @@ class Conversa:
             if mensagem.idMensagem == idMensagem:
                 if idParticipante == mensagem.idOrigem:
                     self._mensagens.remove(mensagem)
-                    return 1 # Mensagem excluida
+                    return 1 # Mensagem excluida com sucesso
                 else:
                     return 0 # Mensagem não pode ser excluida
 
