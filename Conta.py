@@ -5,8 +5,9 @@ from Mensagem import Mensagem
 from GerarID import NewId
 import json
 
-
+#Cria a classe Conta_Perfil
 class Conta_Perfil:
+    #Definindo os atributos da classe: o id do usuário, senha, email, data de nascimento, foto de perfil, publicações, conversas e o status da conta
     def __init__(self, _idUsuario, _nome, _senha, _email, _dataNascimento, _fotoPerfil, _postagens, _conversas, _status):
         self._idUsuario = _idUsuario
         self._nome = _nome
@@ -16,7 +17,7 @@ class Conta_Perfil:
         self._fotoPerfil = _fotoPerfil
         self._postagens = [Postagem(**post) for post in _postagens]
         self._conversas = [Conversa(**conversa) for conversa in _conversas]
-        self._status = _status
+        self._status = _status #O status define se a conta está banida ou se continua ativa
 
     @property
     def idUsuario(self):
@@ -54,6 +55,7 @@ class Conta_Perfil:
     def status(self):
         return self._status
 
+    #Método para editar os dados do perfil
     def EditarPerfil(self, nome, senha, email, dataNascimento, fotoPerfil):
         self._nome = nome
         self._senha = senha
@@ -66,17 +68,21 @@ class Conta_Perfil:
             self._status = False
             # Função do banco de dados, apagar se o status for False por mais de 30 dias
 
+    #Método para recuperar o acesso ao perfil
     def RecuperarPerfil(self, nome, senha):
         if (nome == self._nome) and (senha == self._senha):
             self._status = True
 
+    #Método que publica a postagem com descrição e as fotos
     def FazerPostagem(self, descricao, fotos):
         post = Postagem(NewId(), self._idUsuario, descricao, fotos, datetime.today(), [], 0)
         self._postagens.append(post)
         post.ToJSON()
 
+        #abre o arquivo json
         with open('Contas.json', 'r') as file:
             accounts = json.load(file)
+            #busca a conta no banco de dados e faz a postagem se for encontrada
             for account in accounts['_accounts']:
                 if account['_nome'] == self._nome:
                     account['_postagens'].append(json.loads(json.dumps(post.__dict__)))
@@ -85,6 +91,7 @@ class Conta_Perfil:
         from Login import Login
         return Login(self._nome, self._senha)
 
+    #Método para excluir uma publicação com base no id dessa postagem
     def RemoverPostagem(self, idPostagem):
         for postagem in self._postagens:
             if postagem.idPostagem == idPostagem:
@@ -93,14 +100,17 @@ class Conta_Perfil:
         else:
             return 0 # Erro ao remover postagem
 
+    #Método para criar uma nova conversa por meio do id dos participantes e do texto
     def CriarConversa(self, idParticipantes, texto):
         message = Mensagem(NewId(), self._idUsuario, datetime.today(), texto)
         conversation = Conversa(NewId(), self._idUsuario, idParticipantes, [message])
         self._conversas.append(conversation)
         conversation.ToJSON()
 
+        #abre o arquivo json
         with open('Contas.json', 'r') as file:
             accounts = json.load(file)
+            #busca a conta no banco de dados e cria a conversa se for encontrada
             for account in accounts['_accounts']:
                 if account['_nome'] == self._nome:
                     account['_conversas'].append(json.loads(json.dumps(conversation.__dict__)))
@@ -109,6 +119,7 @@ class Conta_Perfil:
         from Login import Login
         return Login(self._nome, self._senha)
 
+    #Método para sair de uma conversa com outros participantes
     def SairConversa(self, idConversa):
         for conversa in self._conversas:
             if conversa.idConversa == idConversa:
@@ -120,6 +131,7 @@ class Conta_Perfil:
     # def DarLike(self, postagem):
     #     postagem.likeUser(self._idUsuario)
 
+    #Arquivo JSON
     def ToJSON(self):
         for post in self._postagens:
             post.ToJSON()

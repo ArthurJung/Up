@@ -1,3 +1,4 @@
+#Cria a classe Postagem com os atributos id da postagem, id do usuário, descrição, fotos, data, comentário e as curtidas
 class Postagem:
     def __init__(self, _idPostagem, _idUsuario, _descricao, _fotos, _data, _comentarios, _likes):
         self._idPostagem = _idPostagem
@@ -39,6 +40,7 @@ class Postagem:
     def likes(self):
         return self._likes
 
+    #Arquivo JSON
     def ToJSON(self):
         import json
         self._data = json.loads(json.dumps(self._data, indent=4, sort_keys=True, default=str))

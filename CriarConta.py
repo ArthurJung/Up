@@ -1,9 +1,13 @@
 import json
 
-
+# Verifica se já existe uma conta com o mesmo nome de usuário ou email
 def AlredyExistName_Email(nomeUsuario, email):
+
+    #busca no banco de dados JSON
     with open('Contas.json', 'r') as file:
         accounts = json.load(file)
+
+        #Se a conta já existir retorna True, se ainda não existir retorna False
         for account in accounts['_accounts']:
             if account['_nome'] == nomeUsuario:
                 return True
@@ -12,7 +16,7 @@ def AlredyExistName_Email(nomeUsuario, email):
         else:
             return False
 
-
+#Cria a conta inserindo as informações e atualiza o banco de dados
 def CriarConta(account):
     account.ToJSON()
     account = json.loads(json.dumps(account.__dict__))

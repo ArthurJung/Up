@@ -1,3 +1,4 @@
+#Cria a classe mensagem com os atributos id da mensage, id da origem, data e o texto
 class Mensagem:
     def __init__(self, _idMensagem, _idOrigem, _data, _texto):
         self._idMensagem = _idMensagem
@@ -21,6 +22,7 @@ class Mensagem:
     def texto(self):
         return self._texto
 
+    #Arquivo JSON
     def ToJson(self):
         import json
         self._data = json.loads(json.dumps(self._data, indent=4, sort_keys=True, default=str))
