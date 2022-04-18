@@ -55,6 +55,7 @@ class Conta_Perfil:
     def status(self):
         return self._status
 
+    #Método para editar os dados do perfil
     def EditarPerfil(self, nome, senha, email, dataNascimento, fotoPerfil):
         self._nome = nome
         self._senha = senha
@@ -67,10 +68,12 @@ class Conta_Perfil:
             self._status = False
             # Função do banco de dados, apagar se o status for False por mais de 30 dias
 
+    #Método para recuperar o acesso ao perfil
     def RecuperarPerfil(self, nome, senha):
         if (nome == self._nome) and (senha == self._senha):
             self._status = True
 
+    #Método que publica a postagem com descrição e as fotos
     def FazerPostagem(self, descricao, fotos):
         post = Postagem(NewId(), self._idUsuario, descricao, fotos, datetime.today(), [], 0)
         self._postagens.append(post)
@@ -88,6 +91,7 @@ class Conta_Perfil:
         from Login import Login
         return Login(self._nome, self._senha)
 
+    #Método para excluir uma publicação com base no id dessa postagem
     def RemoverPostagem(self, idPostagem):
         for postagem in self._postagens:
             if postagem.idPostagem == idPostagem:
@@ -96,6 +100,7 @@ class Conta_Perfil:
         else:
             return 0 # Erro ao remover postagem
 
+    #Método para criar uma nova conversa por meio do id dos participantes e do texto
     def CriarConversa(self, idParticipantes, texto):
         message = Mensagem(NewId(), self._idUsuario, datetime.today(), texto)
         conversation = Conversa(NewId(), self._idUsuario, idParticipantes, [message])
@@ -114,6 +119,7 @@ class Conta_Perfil:
         from Login import Login
         return Login(self._nome, self._senha)
 
+    #Método para sair de uma conversa com outros participantes
     def SairConversa(self, idConversa):
         for conversa in self._conversas:
             if conversa.idConversa == idConversa:
@@ -125,6 +131,7 @@ class Conta_Perfil:
     # def DarLike(self, postagem):
     #     postagem.likeUser(self._idUsuario)
 
+    #Arquivo JSON
     def ToJSON(self):
         for post in self._postagens:
             post.ToJSON()
